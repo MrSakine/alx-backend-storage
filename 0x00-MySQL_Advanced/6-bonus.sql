@@ -10,8 +10,8 @@ CREATE PROCEDURE AddBonus(
     FROM DUAL
     WHERE NOT EXISTS
     (SELECT * FROM projects WHERE name = project_name LIMIT 1);
-    INSERT INTO corrections(user_id, project_id, score)
     SET @projectID = (SELECT id FROM projects WHERE name = project_name);
+    INSERT INTO corrections(user_id, project_id, score)
     VALUES (user_id, @projectID, score);
   END;$$
 DELIMITER ;
