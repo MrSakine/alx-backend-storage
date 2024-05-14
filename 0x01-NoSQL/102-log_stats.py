@@ -24,7 +24,7 @@ if __name__ == "__main__":
         {"$sort": {"count": -1}},
         {"$limit": 10}
     ]
-    top_ips = list(collection.aggregate(pipeline))
+    top_ips = list(nginx.aggregate(pipeline))
     print("IPs:")
     for ip in top_ips:
         print("\t{0}: {1}".format(ip.get("_id"), ip.get("count")))
