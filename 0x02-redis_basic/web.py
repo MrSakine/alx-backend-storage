@@ -4,8 +4,6 @@ from functools import wraps
 import requests
 import redis
 
-client = redis.Redis()
-
 
 def cache_page(expiration: int):
     """ Page cache decorator """
@@ -14,6 +12,7 @@ def cache_page(expiration: int):
         @wraps(func)
         def wrapper(url: str):
             """ Wrapper body """
+            client = redis.Redis()
             cache_key = f"page:{url}"
             count_key = f"count:{url}"
             client.incr(count_key)
