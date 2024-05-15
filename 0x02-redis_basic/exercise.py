@@ -35,6 +35,22 @@ def call_history(method: Callable) -> Callable:
     return wrapper
 
 
+def replay(store) -> None:
+    """Retrieving lists"""
+    cache = store.__self__
+    key = store.__qualname__
+    inp = key + ":inputs"
+    out = key + ":outputs"
+    inputs = cache._redis.lrange(inp, 0, -1)
+    outputs = cache._redis.lrange(out, 0, -1)
+    call_count = int(cache._redis.get(key) or 0)
+    print("Cache.store was called {} times:".format(call_count))
+    for i, o in zip(inputs, outputs):
+        i = cache.get_str(i)
+        o = cache.get_str(o)
+        print("Cache.store(*{0}) -> {1}".format(i, o))
+
+
 class Cache():
     def __init__(self):
         """Initialize redis instance"""
