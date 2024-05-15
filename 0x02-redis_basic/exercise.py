@@ -35,26 +35,18 @@ def call_history(method: Callable) -> Callable:
     return wrapper
 
 
-def replay(store: Callable) -> None:
+def replay(method: Callable) -> None:
     """Retrieving lists"""
-    key = store.__qualname__
-    cache = store.__self__
-    client = cache._redis
-    inp = key + ":inputs"
-    out = key + ":outputs"
-    c = client.get(key)
-    calls = cache.get_int(c) if c is not None else 0
-    inputs = [
-        cache.get_str(i)
-        for i in client.lrange(inp, 0, -1)
-    ]
-    outputs = [
-        cache.get_str(o)
-        for o in client.lrange(out, 0, -1)
-    ]
-    print(f"{key} was called {calls} times:")
+    name = method.__qualname__
+    client = redis.Redis()
+    inputs = client.lrange("{}:inputs".format(name), 0, -1)
+    outputs = client.lrange("{}:outputs".format(name), 0, -1)
+    print("{} was called {} times:".format(name, len(inputs)))
     for i, o in zip(inputs, outputs):
-        print(f"{key}(*{i}) -> {o}")
+        print("{}(*{}) -> {}".format(
+                name, i.decode("utf-8"), o.decode("utf-8")
+            )
+        )
 
 
 class Cache():
