@@ -45,12 +45,12 @@ def replay(store: Callable) -> None:
     c = client.get(key)
     calls = cache.get_int(c) if c is not None else 0
     inputs = [
-        cache.get_str(input)
-        for input in client.lrange(inp, 0, -1)
+        cache.get_str(i)
+        for i in client.lrange(inp, 0, -1)
     ]
     outputs = [
-        cache.get_str(output)
-        for output in client.lrange(out, 0, -1)
+        cache.get_str(o)
+        for o in client.lrange(out, 0, -1)
     ]
     print(f"{key} was called {calls} times:")
     for i, o in zip(inputs, outputs):
