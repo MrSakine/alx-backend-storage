@@ -3,12 +3,13 @@
 import uuid
 import redis
 
+
 class Cache():
     def __init__(self):
         """Initialize redis instance"""
         self._redis = redis.Redis()
         self._redis.flushdb()
-        
+
     def store(self, data: any) -> str:
         """
         Generate a random key using uuid,
