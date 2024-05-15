@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Writing strings to Redis """
+""" Redis basic """
 import typing
 import uuid
 import redis
